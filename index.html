@@ -28,12 +28,10 @@ body{
   overflow-x:hidden;
   cursor:crosshair;
 }
-/* scanlines */
 body::after{
   content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);
 }
-/* dot grid */
 body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:radial-gradient(circle,#1e1e00 1px,transparent 1px);
@@ -71,6 +69,43 @@ header{
 .hdr-profile-link::before{content:'▶ '}
 .hdr-profile-link:hover{background:var(--bg);color:var(--ink);outline:2px solid var(--ink);box-shadow:none}
 
+/* ── COPY BAR (sticky, below header) ── */
+.copy-bar{
+  position:sticky;top:54px;z-index:190;
+  background:var(--paper);
+  border-bottom:2px solid var(--dim);
+  padding:10px 24px;
+  display:none;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.copy-bar.visible{display:flex}
+.copy-bar-label{
+  font-family:var(--px);font-size:6px;
+  color:var(--dim2);letter-spacing:.12em;
+  margin-right:4px;white-space:nowrap;
+}
+.copy-bar .selected-name{
+  font-family:var(--mono);font-size:12px;
+  color:var(--ink2);
+  flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.btn-copy{
+  background:var(--paper);
+  border:2px solid var(--dim);
+  color:var(--dim2);
+  font-family:var(--px);font-size:8px;
+  padding:10px 18px;cursor:pointer;
+  box-shadow:3px 3px 0 var(--dim);
+  transition:all .06s;letter-spacing:.04em;
+  white-space:nowrap;
+}
+.btn-copy:hover{border-color:var(--ink);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btn-copy:active{box-shadow:none;transform:translate(3px,3px)}
+.btn-copy.copied{background:var(--green);color:#000;border-color:var(--green);box-shadow:none}
+
 /* ── SHELL ── */
 .shell{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:28px 24px 80px}
 
@@ -91,31 +126,22 @@ header{
   padding:20px;margin-bottom:24px;
   position:relative;
 }
-/* corner pixels */
 .box::before{content:'';position:absolute;top:-6px;left:-6px;width:9px;height:9px;background:var(--ink)}
 .box::after{content:'';position:absolute;bottom:-6px;right:-6px;width:9px;height:9px;background:var(--ink)}
 
-/* ── SETTINGS GRID ── */
+/* ── SETTINGS ── */
 .settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
 @media(max-width:720px){.settings-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:460px){.settings-grid{grid-template-columns:1fr}}
-
 .field label{
-  display:block;
-  font-family:var(--px);font-size:6px;
-  color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;
-  margin-bottom:8px;
+  display:block;font-family:var(--px);font-size:6px;
+  color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;
 }
 .field input,.field select{
-  width:100%;
-  background:var(--bg);
-  border:2px solid var(--dim);
-  color:var(--ink2);
-  padding:10px 12px;
+  width:100%;background:var(--bg);border:2px solid var(--dim);
+  color:var(--ink2);padding:10px 12px;
   font-size:14px;font-family:var(--mono);font-weight:500;
-  outline:none;appearance:none;
-  transition:border-color .08s;
-  line-height:1;
+  outline:none;appearance:none;transition:border-color .08s;line-height:1;
 }
 .field input:focus,.field select:focus{border-color:var(--ink)}
 .field select{
@@ -124,52 +150,30 @@ header{
   padding-right:30px;cursor:pointer;
 }
 .field select option{background:#151515;color:#f0f0f0}
-
 .settings-footer{
   display:flex;align-items:center;flex-wrap:wrap;gap:16px;
   padding-top:16px;border-top:2px solid var(--dim);
 }
 .checkbox-row{display:flex;align-items:center;gap:9px;cursor:pointer}
-.checkbox-row input[type=checkbox]{
-  width:16px;height:16px;accent-color:var(--ink);
-  cursor:pointer;flex-shrink:0;
-}
-.checkbox-row span{
-  font-size:13px;font-family:var(--mono);font-weight:500;
-  color:var(--ink2);user-select:none;
-}
+.checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--ink);cursor:pointer;flex-shrink:0}
+.checkbox-row span{font-size:13px;font-family:var(--mono);font-weight:500;color:var(--ink2);user-select:none}
 
-/* ── BUTTONS ── */
+/* ── MAIN BUTTON ── */
 .btn{
   background:var(--ink);border:none;color:var(--bg);
   font-family:var(--px);font-size:8px;
   padding:11px 18px;cursor:pointer;
   display:inline-flex;align-items:center;gap:8px;letter-spacing:.05em;
-  box-shadow:4px 4px 0 #666640;
-  transition:all .06s;
+  box-shadow:4px 4px 0 #666640;transition:all .06s;
 }
 .btn:hover{background:var(--bg);color:var(--ink);outline:2px solid var(--ink);box-shadow:none}
 .btn:active{box-shadow:none;transform:translate(4px,4px)}
 .btn:disabled{background:var(--dim);color:var(--bg);cursor:not-allowed;box-shadow:none;transform:none}
 
-.btn-sm{
-  background:var(--paper);
-  border:2px solid var(--dim);
-  color:var(--dim2);
-  font-family:var(--px);font-size:7px;
-  padding:8px 13px;cursor:pointer;
-  box-shadow:3px 3px 0 var(--dim);
-  transition:all .06s;letter-spacing:.04em;
-}
-.btn-sm:hover{border-color:var(--ink);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
-.btn-sm:active{box-shadow:none;transform:translate(3px,3px)}
-.btn-sm.copied{background:var(--green);color:#000;border-color:var(--green);box-shadow:none}
-
 /* ── STATUS BAR ── */
 .status-bar{
   display:flex;align-items:center;gap:12px;
-  background:var(--paper);
-  border:2px solid var(--dim);border-left:5px solid var(--dim);
+  background:var(--paper);border:2px solid var(--dim);border-left:5px solid var(--dim);
   padding:12px 16px;margin-bottom:22px;
   font-size:13px;font-family:var(--mono);font-weight:500;
   color:var(--dim2);letter-spacing:.03em;
@@ -187,10 +191,8 @@ header{
 .folder-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
 .tab-btn{
   background:var(--paper);border:2px solid var(--dim);
-  color:var(--dim2);
-  font-family:var(--px);font-size:6px;
-  padding:7px 12px;cursor:pointer;
-  letter-spacing:.06em;transition:all .06s;
+  color:var(--dim2);font-family:var(--px);font-size:6px;
+  padding:7px 12px;cursor:pointer;letter-spacing:.06em;transition:all .06s;
 }
 .tab-btn:hover{border-color:var(--ink2);color:var(--ink2)}
 .tab-btn.active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
@@ -207,40 +209,27 @@ header{
   transition:border-color .06s;
 }
 .img-card:hover{border-color:var(--dim2)}
-.img-card.selected{
-  border:3px solid var(--ink);
-  box-shadow:4px 4px 0 var(--ink);
-}
+.img-card.selected{border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
 .img-card.selected::after{
   content:'▶';position:absolute;top:5px;right:6px;
   font-family:var(--px);font-size:7px;color:var(--ink);line-height:1;
 }
-.img-preview{
-  height:108px;display:flex;align-items:center;justify-content:center;
-  background:var(--bg);padding:10px;
-}
+.img-preview{height:108px;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:10px}
 .img-preview img{max-width:100%;max-height:100%;object-fit:contain}
 .img-name{
-  padding:7px 9px;
-  font-size:11px;font-family:var(--mono);font-weight:500;
-  color:var(--dim2);word-break:break-all;
-  border-top:2px solid var(--dim);line-height:1.5;
+  padding:7px 9px;font-size:11px;font-family:var(--mono);font-weight:500;
+  color:var(--dim2);word-break:break-all;border-top:2px solid var(--dim);line-height:1.5;
 }
 .empty{grid-column:1/-1;text-align:center;padding:52px 20px;color:var(--dim2)}
-.empty pre{
-  font-size:12px;font-family:var(--mono);
-  line-height:1.9;display:inline-block;text-align:left;
-}
+.empty pre{font-size:12px;font-family:var(--mono);line-height:1.9;display:inline-block;text-align:left}
 
-/* ── OUTPUT SECTION ── */
-.output-section{margin-top:4px}
+/* ── OUTPUT ── */
 .preview-box{
   background:var(--bg);border:2px solid var(--dim);
   padding:18px 20px;margin-bottom:14px;min-height:64px;
   display:flex;align-items:center;flex-wrap:wrap;gap:12px;
 }
 .preview-box .ph{font-size:13px;font-family:var(--mono);color:var(--dim2)}
-
 .code-block-wrap{margin-bottom:14px}
 .code-label{
   font-family:var(--px);font-size:6px;color:var(--ink);
@@ -249,14 +238,10 @@ header{
 }
 .code-label::before{content:'> ';color:var(--dim2)}
 .code-block{
-  background:var(--bg);
-  border:2px solid var(--dim);border-left:4px solid var(--ink);
-  padding:14px 16px;
-  font-family:var(--mono);font-size:13px;font-weight:500;
-  white-space:pre-wrap;word-break:break-all;
-  color:#f6fef6;line-height:1.8;
+  background:var(--bg);border:2px solid var(--dim);border-left:4px solid var(--ink);
+  padding:14px 16px;font-family:var(--mono);font-size:13px;font-weight:500;
+  white-space:pre-wrap;word-break:break-all;color:#f6fef6;line-height:1.8;
 }
-.copy-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 </style>
 </head>
 <body>
@@ -268,6 +253,15 @@ header{
     <span id="profileLinkText">@OstinUA</span>
   </a>
 </header>
+
+<!-- Sticky copy bar — appears after selecting an image -->
+<div class="copy-bar" id="copyBar">
+  <span class="copy-bar-label">COPY:</span>
+  <button class="btn-copy" id="btnCopyHtml" onclick="copyCode('html')">[HTML]</button>
+  <button class="btn-copy" id="btnCopyMd"   onclick="copyCode('md')">[MARKDOWN]</button>
+  <button class="btn-copy" id="btnCopyUrl"  onclick="copyCode('url')">[URL]</button>
+  <span class="selected-name" id="copyBarName"></span>
+</div>
 
 <div class="shell">
 
@@ -354,11 +348,6 @@ header{
       <div class="code-label">RAW URL</div>
       <div class="code-block" id="rawUrl"></div>
     </div>
-    <div class="copy-row">
-      <button class="btn-sm" id="btnCopyHtml" onclick="copyCode('html')">[COPY HTML]</button>
-      <button class="btn-sm" id="btnCopyMd"   onclick="copyCode('md')">[COPY MD]</button>
-      <button class="btn-sm" id="btnCopyUrl"  onclick="copyCode('url')">[COPY URL]</button>
-    </div>
   </div>
 
 </div>
@@ -389,37 +378,43 @@ async function loadRepo() {
   const icon = document.getElementById('loadIcon');
   btn.disabled = true;
   icon.innerHTML = '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>';
-  setStatus('loading', `Fetching ${user}/${repo}@${branch}...`);
+  setStatus('loading', 'Fetching ' + user + '/' + repo + '@' + branch + '...');
 
   allFiles = []; selectedFile = null;
   document.getElementById('folderTabs').innerHTML = '';
   document.getElementById('outputSection').style.display = 'none';
+  document.getElementById('copyBar').classList.remove('visible');
   renderGrid([]);
 
   try {
-    const res  = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || `HTTP ${res.status}`); }
+    const res = await fetch('https://api.github.com/repos/' + user + '/' + repo + '/git/trees/' + branch + '?recursive=1');
+    if (!res.ok) {
+      const e = await res.json().catch(function() { return {}; });
+      throw new Error(e.message || 'HTTP ' + res.status);
+    }
     const data = await res.json();
-    const imgs = (data.tree || []).filter(f =>
-      f.type === 'blob' && /\.(png|jpe?g|gif|svg|webp|ico|avif|bmp)$/i.test(f.path)
-    );
+    const imgs = (data.tree || []).filter(function(f) {
+      return f.type === 'blob' && /\.(png|jpe?g|gif|svg|webp|ico|avif|bmp)$/i.test(f.path);
+    });
     if (!imgs.length) {
       setStatus('err', 'No images found — add .png/.jpg/.gif/.svg files to the repo.');
       renderGrid([]);
     } else {
-      allFiles = imgs.map(f => ({
-        path:   f.path,
-        folder: f.path.includes('/') ? f.path.split('/').slice(0, -1).join('/') : '(root)',
-        name:   f.path.split('/').pop(),
-        raw:    `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${encodeURIComponent(f.path).replace(/%2F/g, '/')}`
-      }));
-      setStatus('ok', `OK: ${allFiles.length} image(s) loaded — ${user}/${repo}@${branch}`);
+      allFiles = imgs.map(function(f) {
+        return {
+          path:   f.path,
+          folder: f.path.includes('/') ? f.path.split('/').slice(0, -1).join('/') : '(root)',
+          name:   f.path.split('/').pop(),
+          raw:    'https://raw.githubusercontent.com/' + user + '/' + repo + '/' + branch + '/' + encodeURIComponent(f.path).replace(/%2F/g, '/')
+        };
+      });
+      setStatus('ok', 'OK: ' + allFiles.length + ' image(s) loaded — ' + user + '/' + repo + '@' + branch);
       currentFolder = 'all';
       buildFolderTabs();
       renderGrid(allFiles);
     }
   } catch (e) {
-    setStatus('err', `ERR: ${e.message}`);
+    setStatus('err', 'ERR: ' + e.message);
     renderGrid([]);
   }
 
@@ -427,96 +422,110 @@ async function loadRepo() {
   icon.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>';
 }
 
+// ── Folder tabs: use event delegation, no inline onclick ──
 function buildFolderTabs() {
-  const folders = ['all', ...[...new Set(allFiles.map(f => f.folder))].sort()];
-  document.getElementById('folderTabs').innerHTML = folders.map(f =>
-    `<button class="tab-btn${f === currentFolder ? ' active' : ''}" onclick="switchFolder(${JSON.stringify(f)})">${f === 'all' ? '[ALL: ' + allFiles.length + ']' : '[' + f + ']'}</button>`
-  ).join('');
-}
-function switchFolder(f) {
-  currentFolder = f;
-  buildFolderTabs();
-  renderGrid(f === 'all' ? allFiles : allFiles.filter(x => x.folder === f));
+  var folders = ['all'].concat([...new Set(allFiles.map(function(f) { return f.folder; }))].sort());
+  var html = '';
+  for (var i = 0; i < folders.length; i++) {
+    var f = folders[i];
+    var label = f === 'all' ? '[ALL: ' + allFiles.length + ']' : '[' + f + ']';
+    var active = f === currentFolder ? ' active' : '';
+    html += '<button class="tab-btn' + active + '" data-folder="' + f.replace(/"/g, '&quot;') + '">' + label + '</button>';
+  }
+  document.getElementById('folderTabs').innerHTML = html;
 }
 
+document.getElementById('folderTabs').addEventListener('click', function(e) {
+  var btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  currentFolder = btn.dataset.folder;
+  buildFolderTabs();
+  renderGrid(currentFolder === 'all' ? allFiles : allFiles.filter(function(x) { return x.folder === currentFolder; }));
+});
+
+// ── Image grid: event delegation ──
 function renderGrid(files) {
-  const g = document.getElementById('imgGrid');
+  var g = document.getElementById('imgGrid');
   if (!files.length) {
-    g.innerHTML = `<div class="empty"><pre>
- ┌──────────────────────┐
- │   NO DATA LOADED     │
- │                      │
- │   configure above,   │
- │   then [LOAD REPO]   │
- └──────────────────────┘</pre></div>`;
+    g.innerHTML = '<div class="empty"><pre>\n ┌──────────────────────┐\n │   NO DATA LOADED     │\n │                      │\n │   configure above,   │\n │   then [LOAD REPO]   │\n └──────────────────────┘</pre></div>';
     return;
   }
-  g.innerHTML = files.map(f => {
-    const sel = selectedFile && selectedFile.path === f.path ? ' selected' : '';
-    return `<div class="img-card${sel}" data-path="${f.path.replace(/"/g,'&quot;')}">
-      <div class="img-preview"><img src="${f.raw}" loading="lazy" alt="${toAlt(f.name)}"
-        onerror="this.outerHTML='<span style=\\'color:#555;font-size:20px\\'>?</span>'"></div>
-      <div class="img-name">${f.name}</div>
-    </div>`;
-  }).join('');
+  var html = '';
+  for (var i = 0; i < files.length; i++) {
+    var f = files[i];
+    var sel = (selectedFile && selectedFile.path === f.path) ? ' selected' : '';
+    var safePath = f.path.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    html += '<div class="img-card' + sel + '" data-path="' + safePath + '">'
+      + '<div class="img-preview"><img src="' + f.raw + '" loading="lazy" alt="' + toAlt(f.name) + '" onerror="this.outerHTML=\'<span style=\\\'color:#555;font-size:20px\\\'>?</span>\'"></div>'
+      + '<div class="img-name">' + f.name + '</div>'
+      + '</div>';
+  }
+  g.innerHTML = html;
 }
 
 document.getElementById('imgGrid').addEventListener('click', function(e) {
-  const card = e.target.closest('.img-card');
+  var card = e.target.closest('.img-card');
   if (!card) return;
-  const path = card.dataset.path;
-  selectedFile = allFiles.find(f => f.path === path) || null;
+  var path = card.dataset.path;
+  selectedFile = null;
+  for (var i = 0; i < allFiles.length; i++) {
+    if (allFiles[i].path === path) { selectedFile = allFiles[i]; break; }
+  }
   if (!selectedFile) return;
 
-  document.querySelectorAll('.img-card').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.img-card').forEach(function(el) { el.classList.remove('selected'); });
   card.classList.add('selected');
 
-  const out = document.getElementById('outputSection');
+  var out = document.getElementById('outputSection');
   out.style.display = 'block';
   generateCode(selectedFile);
-  setTimeout(() => out.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+
+  // Show sticky copy bar with filename
+  var bar = document.getElementById('copyBar');
+  bar.classList.add('visible');
+  document.getElementById('copyBarName').textContent = selectedFile.name;
 });
 
 function regenCode() { updateProfile(); if (selectedFile) generateCode(selectedFile); }
 
 function generateCode(file) {
-  const user  = document.getElementById('ghUser').value.trim() || 'OstinUA';
-  const w     = document.getElementById('imgWidth').value;
-  const h     = document.getElementById('imgHeight').value;
-  const va    = document.getElementById('imgValign').value;
-  const wrap  = document.getElementById('linkProfile').checked;
-  const blank = document.getElementById('openBlank').checked;
-  const alt   = toAlt(file.name);
+  var user  = document.getElementById('ghUser').value.trim() || 'OstinUA';
+  var w     = document.getElementById('imgWidth').value;
+  var h     = document.getElementById('imgHeight').value;
+  var va    = document.getElementById('imgValign').value;
+  var wrap  = document.getElementById('linkProfile').checked;
+  var blank = document.getElementById('openBlank').checked;
+  var alt   = toAlt(file.name);
 
-  let attrs = `src="${file.raw}"`;
-  if (w) attrs += ` width="${w}"`;
-  if (h) attrs += ` height="${h}"`;
-  attrs += ` valign="${va}" alt="${alt}"`;
+  var attrs = 'src="' + file.raw + '"';
+  if (w) attrs += ' width="' + w + '"';
+  if (h) attrs += ' height="' + h + '"';
+  attrs += ' valign="' + va + '" alt="' + alt + '"';
 
-  const img    = `<img ${attrs}>`;
-  const target = blank ? ' target="_blank" rel="noopener"' : '';
-  const html   = wrap ? `<a href="https://github.com/${user}"${target}>${img}</a>` : img;
-  const md     = wrap ? `[![${alt}](${file.raw})](https://github.com/${user})` : `![${alt}](${file.raw})`;
+  var img    = '<img ' + attrs + '>';
+  var target = blank ? ' target="_blank" rel="noopener"' : '';
+  var html   = wrap ? '<a href="https://github.com/' + user + '"' + target + '>' + img + '</a>' : img;
+  var md     = wrap ? '[![' + alt + '](' + file.raw + ')](https://github.com/' + user + ')' : '![' + alt + '](' + file.raw + ')';
 
   document.getElementById('htmlCode').textContent = html;
   document.getElementById('mdCode').textContent   = md;
   document.getElementById('rawUrl').textContent   = file.raw;
 
-  const box   = document.getElementById('previewBox');
-  const clone = html.replace(/valign="[^"]*"/, '').replace(/<a /, '<a style="display:inline-flex;align-items:center" ');
-  box.innerHTML = clone + `<span style="font-size:12px;color:var(--dim2);font-family:var(--mono);margin-left:10px">${file.name}</span>`;
+  var box   = document.getElementById('previewBox');
+  var clone = html.replace(/valign="[^"]*"/, '').replace('<a ', '<a style="display:inline-flex;align-items:center" ');
+  box.innerHTML = clone + '<span style="font-size:12px;color:var(--dim2);font-family:var(--mono);margin-left:10px">' + file.name + '</span>';
 }
 
 function copyCode(type) {
-  const ids = { html: 'htmlCode', md: 'mdCode', url: 'rawUrl' };
-  const btns = { html: 'btnCopyHtml', md: 'btnCopyMd', url: 'btnCopyUrl' };
-  const text = document.getElementById(ids[type]).textContent;
-  const btn  = document.getElementById(btns[type]);
-  navigator.clipboard.writeText(text).then(() => {
+  var ids  = { html: 'htmlCode', md: 'mdCode', url: 'rawUrl' };
+  var btns = { html: 'btnCopyHtml', md: 'btnCopyMd', url: 'btnCopyUrl' };
+  var text = document.getElementById(ids[type]).textContent;
+  var btn  = document.getElementById(btns[type]);
+  navigator.clipboard.writeText(text).then(function() {
     btn.classList.add('copied');
-    const old = btn.textContent;
+    var old = btn.textContent;
     btn.textContent = '[✓ COPIED]';
-    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = old; }, 2000);
+    setTimeout(function() { btn.classList.remove('copied'); btn.textContent = old; }, 2000);
   });
 }
 
