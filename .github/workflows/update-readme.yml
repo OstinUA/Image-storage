@@ -1,0 +1,103 @@
+name: Update README
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update project structure in README
+        run: |
+          python3 << 'PYEOF'
+          import os, re, subprocess
+
+          repo   = os.environ['GITHUB_REPOSITORY']
+          branch = os.environ['GITHUB_REF_NAME']
+          raw    = f"https://raw.githubusercontent.com/{repo}/{branch}"
+
+          IMAGE_EXT = re.compile(
+              r'\.(png|jpg|jpeg|gif|svg|webp|avif|bmp|ico)$', re.IGNORECASE
+          )
+
+          result = subprocess.run(
+              ['find', '.', '-type', 'f'],
+              capture_output=True, text=True
+          )
+          files = sorted([
+              f[2:] for f in result.stdout.strip().split('\n')
+              if f.strip() and IMAGE_EXT.search(f)
+          ])
+
+          from collections import defaultdict
+          folders = defaultdict(list)
+          for f in files:
+              parts = f.split('/')
+              folder = '/'.join(parts[:-1]) if len(parts) > 1 else '(root)'
+              folders[folder].append(f)
+
+          # Tree block
+          lines = ['.']
+          seen = set()
+          for f in files:
+              parts = f.split('/')
+              if len(parts) == 1:
+                  lines.append(f'├── {parts[0]}')
+              else:
+                  top = parts[0]
+                  if top not in seen:
+                      seen.add(top)
+                      lines.append(f'├── {top}/')
+                  lines.append(f'│   └── {parts[-1]}')
+          for extra in ['index.html', 'LICENSE', 'README.md']:
+              lines.append(f'├── {extra}')
+          if lines:
+              lines[-1] = lines[-1].replace('├──', '└──', 1)
+
+          tree = '```text\n' + '\n'.join(lines) + '\n```\n'
+
+          # Image table per folder
+          table = ''
+          for folder in sorted(folders.keys()):
+              label = '(root)' if folder == '(root)' else f'`{folder}`'
+              table += f'\n#### 📁 {label}\n\n'
+              table += '| Preview | File | Raw URL |\n'
+              table += '|---------|------|---------|\n'
+              for f in folders[folder]:
+                  name = f.split('/')[-1]
+                  url  = f"{raw}/{f}"
+                  table += f'| <img src="{url}" height="32"> | `{name}` | [link]({url}) |\n'
+
+          block = tree + table
+
+          with open('README.md', 'r') as fh:
+              content = fh.read()
+
+          updated = re.sub(
+              r'<!-- STRUCTURE_START -->.*?<!-- STRUCTURE_END -->',
+              f'<!-- STRUCTURE_START -->\n{block}\n<!-- STRUCTURE_END -->',
+              content,
+              flags=re.DOTALL
+          )
+
+          with open('README.md', 'w') as fh:
+              fh.write(updated)
+
+          print('Done.')
+          PYEOF
+
+      - name: Commit README
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --staged --quiet || git commit -m "docs: auto-update project structure [skip ci]"
+          git push
