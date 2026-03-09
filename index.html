@@ -254,7 +254,7 @@ header{
   padding:14px 16px;
   font-family:var(--mono);font-size:13px;font-weight:500;
   white-space:pre-wrap;word-break:break-all;
-  color:#88ff88;line-height:1.8;
+  color:#f6fef6;line-height:1.8;
 }
 .copy-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 </style>
@@ -453,7 +453,7 @@ function renderGrid(files) {
   }
   g.innerHTML = files.map(f => {
     const sel = selectedFile && selectedFile.path === f.path ? ' selected' : '';
-    return `<div class="img-card${sel}" onclick="selectImage(${JSON.stringify(f.path)})">
+    return `<div class="img-card${sel}" data-path="${f.path.replace(/"/g,'&quot;')}">
       <div class="img-preview"><img src="${f.raw}" loading="lazy" alt="${toAlt(f.name)}"
         onerror="this.outerHTML='<span style=\\'color:#555;font-size:20px\\'>?</span>'"></div>
       <div class="img-name">${f.name}</div>
@@ -461,25 +461,21 @@ function renderGrid(files) {
   }).join('');
 }
 
-function selectImage(path) {
+document.getElementById('imgGrid').addEventListener('click', function(e) {
+  const card = e.target.closest('.img-card');
+  if (!card) return;
+  const path = card.dataset.path;
   selectedFile = allFiles.find(f => f.path === path) || null;
   if (!selectedFile) return;
 
-  // Update card highlight without full re-render
-  document.querySelectorAll('.img-card').forEach(el => {
-    const isThis = el.querySelector('.img-name') && el.querySelector('.img-name').textContent === selectedFile.name
-      && el.onclick && el.getAttribute('onclick') && el.getAttribute('onclick').includes(JSON.stringify(path).slice(1,-1).replace(/\\/g,'\\\\'));
-    el.classList.toggle('selected', el.onclick && el.getAttribute('onclick') === `selectImage(${JSON.stringify(path)})`);
-  });
-  // Re-render to properly update selected state
-  renderGrid(currentFolder === 'all' ? allFiles : allFiles.filter(x => x.folder === currentFolder));
+  document.querySelectorAll('.img-card').forEach(el => el.classList.remove('selected'));
+  card.classList.add('selected');
 
-  // Show output and generate code
   const out = document.getElementById('outputSection');
   out.style.display = 'block';
   generateCode(selectedFile);
   setTimeout(() => out.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
-}
+});
 
 function regenCode() { updateProfile(); if (selectedFile) generateCode(selectedFile); }
 
