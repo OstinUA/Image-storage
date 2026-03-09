@@ -3,250 +3,279 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Image Storage CDN</title>
+<title>IMG//STORAGE</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --border: #30363d;
-    --accent: #238636;
-    --accent-hover: #2ea043;
-    --text: #c9d1d9;
-    --muted: #8b949e;
-    --link: #58a6ff;
-    --code-bg: #1c2128;
-    --radius: 8px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0c0c;
+  --paper:#151515;
+  --ink:#BDECB6;
+  --ink2:#f0f0f0;
+  --dim:#3a3a28;
+  --dim2:#7a7a5a;
+  --red:#ff3333;
+  --green:#BDECB6;
+  --px:'Press Start 2P',monospace;
+  --mono:'IBM Plex Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink2);
+  font-family:var(--mono);
+  min-height:100vh;
+  overflow-x:hidden;
+  cursor:crosshair;
+}
+/* scanlines */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);
+}
+/* dot grid */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle,#1e1e00 1px,transparent 1px);
+  background-size:10px 10px;opacity:.45;
+}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--ink);border:2px solid var(--bg)}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .hdr-logo { display: flex; align-items: center; gap: 8px; }
-  .hdr-logo svg { flex-shrink: 0; color: #c9d1d9; }
-  .hdr-title { font-size: 18px; font-weight: 600; }
-  .hdr-title span { color: var(--text); }
-  .hdr-spacer { flex: 1; }
-  .hdr-profile-link { color: var(--link); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 6px; margin-left: auto; }
-  .hdr-profile-link:hover { text-decoration: underline; }
+/* ── HEADER ── */
+header{
+  position:sticky;top:0;z-index:200;
+  background:var(--bg);
+  border-bottom:3px solid var(--ink);
+  padding:0 24px;height:54px;
+  display:flex;align-items:center;gap:16px;
+}
+.hdr-title{
+  font-family:var(--px);font-size:10px;
+  color:var(--ink);letter-spacing:.04em;white-space:nowrap;
+}
+.hdr-title .sl{color:var(--dim2)}
+.blink{animation:bl .9s step-end infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+.hdr-spacer{flex:1}
+.hdr-profile-link{
+  display:inline-flex;align-items:center;
+  background:var(--ink);color:var(--bg);
+  font-family:var(--px);font-size:7px;
+  text-decoration:none;padding:8px 12px;
+  letter-spacing:.05em;white-space:nowrap;
+  box-shadow:3px 3px 0 #666640;
+  transition:all .06s;
+}
+.hdr-profile-link::before{content:'▶ '}
+.hdr-profile-link:hover{background:var(--bg);color:var(--ink);outline:2px solid var(--ink);box-shadow:none}
 
-  /* ── MAIN LAYOUT ── */
-  .shell { max-width: 900px; margin: 0 auto; padding: 28px 20px; }
+/* ── SHELL ── */
+.shell{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:28px 24px 80px}
 
-  /* ── SECTION TITLES ── */
-  .sect-title { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 16px; }
+/* ── SECTION LABEL ── */
+.sect-title{
+  font-family:var(--px);font-size:7px;
+  color:var(--ink);letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:14px;padding-bottom:10px;
+  border-bottom:2px solid var(--dim);
+  display:flex;align-items:center;gap:8px;
+}
+.sect-title::before{content:'## ';color:var(--dim2)}
 
-  /* ── SETTINGS CARD ── */
-  .settings-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin-bottom: 24px;
-  }
-  .settings-grid { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 14px; 
-  }
-  @media(max-width:700px){ .settings-grid { grid-template-columns: 1fr 1fr; } }
-  @media(max-width:460px){ .settings-grid { grid-template-columns: 1fr; } }
+/* ── BOX ── */
+.box{
+  background:var(--paper);
+  border:3px solid var(--ink);
+  padding:20px;margin-bottom:24px;
+  position:relative;
+}
+/* corner pixels */
+.box::before{content:'';position:absolute;top:-6px;left:-6px;width:9px;height:9px;background:var(--ink)}
+.box::after{content:'';position:absolute;bottom:-6px;right:-6px;width:9px;height:9px;background:var(--ink)}
 
-  .field label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-  .field input, .field select {
-    width: 100%;
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    padding: 8px 10px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  .field input:focus, .field select:focus { border-color: var(--link); }
-  .field select option { background: var(--code-bg); }
+/* ── SETTINGS GRID ── */
+.settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.settings-grid{grid-template-columns:1fr}}
 
-  .settings-footer {
-    display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
-    padding-top: 14px;
-    margin-top: 14px;
-  }
-  .checkbox-row { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-  .checkbox-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
-  .checkbox-row span { margin: 0; color: var(--text); font-size: 14px; user-select: none; }
+.field label{
+  display:block;
+  font-family:var(--px);font-size:6px;
+  color:var(--dim2);letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.field input,.field select{
+  width:100%;
+  background:var(--bg);
+  border:2px solid var(--dim);
+  color:var(--ink2);
+  padding:10px 12px;
+  font-size:14px;font-family:var(--mono);font-weight:500;
+  outline:none;appearance:none;
+  transition:border-color .08s;
+  line-height:1;
+}
+.field input:focus,.field select:focus{border-color:var(--ink)}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23BDECB6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  padding-right:30px;cursor:pointer;
+}
+.field select option{background:#151515;color:#f0f0f0}
 
-  .load-btn {
-    margin-left: auto;
-    background: var(--accent);
-    border: none;
-    border-radius: 6px;
-    color: #fff;
-    font-size: 14px;
-    padding: 8px 18px;
-    cursor: pointer;
-    transition: background .15s;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .load-btn:hover { background: var(--accent-hover); }
-  .load-btn:disabled { opacity: .5; cursor: not-allowed; }
-  .load-btn svg { animation: none; }
-  .load-btn.loading svg { animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+.settings-footer{
+  display:flex;align-items:center;flex-wrap:wrap;gap:16px;
+  padding-top:16px;border-top:2px solid var(--dim);
+}
+.checkbox-row{display:flex;align-items:center;gap:9px;cursor:pointer}
+.checkbox-row input[type=checkbox]{
+  width:16px;height:16px;accent-color:var(--ink);
+  cursor:pointer;flex-shrink:0;
+}
+.checkbox-row span{
+  font-size:13px;font-family:var(--mono);font-weight:500;
+  color:var(--ink2);user-select:none;
+}
 
-  /* ── STATUS BAR ── */
-  .status-bar {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    font-size: 13px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
-  .dot.ok { background: #3fb950; }
-  .dot.err { background: #f85149; }
-  .dot.loading { background: #d29922; animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+/* ── BUTTONS ── */
+.btn{
+  background:var(--ink);border:none;color:var(--bg);
+  font-family:var(--px);font-size:8px;
+  padding:11px 18px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;letter-spacing:.05em;
+  box-shadow:4px 4px 0 #666640;
+  transition:all .06s;
+}
+.btn:hover{background:var(--bg);color:var(--ink);outline:2px solid var(--ink);box-shadow:none}
+.btn:active{box-shadow:none;transform:translate(4px,4px)}
+.btn:disabled{background:var(--dim);color:var(--bg);cursor:not-allowed;box-shadow:none;transform:none}
 
-  /* ── FOLDER TABS ── */
-  .folder-tabs {
-    display: flex; flex-wrap: wrap; gap: 8px;
-    margin-bottom: 20px;
-  }
-  .tab-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    color: var(--text);
-    font-size: 13px;
-    padding: 5px 14px;
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .tab-btn:hover { border-color: var(--link); color: var(--link); }
-  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-sm{
+  background:var(--paper);
+  border:2px solid var(--dim);
+  color:var(--dim2);
+  font-family:var(--px);font-size:7px;
+  padding:8px 13px;cursor:pointer;
+  box-shadow:3px 3px 0 var(--dim);
+  transition:all .06s;letter-spacing:.04em;
+}
+.btn-sm:hover{border-color:var(--ink);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btn-sm:active{box-shadow:none;transform:translate(3px,3px)}
+.btn-sm.copied{background:var(--green);color:#000;border-color:var(--green);box-shadow:none}
 
-  /* ── IMAGE GRID ── */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 14px;
-    margin-bottom: 32px;
-  }
-  .img-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden; cursor: pointer;
-    transition: border-color .15s, transform .12s;
-    position: relative;
-  }
-  .img-card:hover { border-color: var(--link); transform: translateY(-2px); }
-  .img-card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
-  .img-preview {
-    height: 110px;
-    display: flex; align-items: center; justify-content: center;
-    background: #0d1117;
-    padding: 8px;
-  }
-  .img-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
-  .img-name {
-    padding: 8px;
-    font-size: 11px; color: var(--muted);
-    word-break: break-all;
-    border-top: 1px solid var(--border);
-  }
+/* ── STATUS BAR ── */
+.status-bar{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper);
+  border:2px solid var(--dim);border-left:5px solid var(--dim);
+  padding:12px 16px;margin-bottom:22px;
+  font-size:13px;font-family:var(--mono);font-weight:500;
+  color:var(--dim2);letter-spacing:.03em;
+  transition:border-left-color .2s,color .2s;
+}
+.status-bar.ok{border-left-color:var(--green);color:var(--green)}
+.status-bar.err{border-left-color:var(--red);color:var(--red)}
+.status-bar.loading{border-left-color:var(--ink);color:var(--ink)}
+.dot{width:10px;height:10px;flex-shrink:0;background:var(--dim);transition:background .2s}
+.dot.ok{background:var(--green);box-shadow:0 0 8px var(--green)}
+.dot.err{background:var(--red);box-shadow:0 0 8px var(--red)}
+.dot.loading{background:var(--ink);animation:bl .7s step-end infinite}
 
-  .empty {
-    grid-column: 1/-1;
-    text-align: center; padding: 48px 20px;
-    color: var(--muted); font-size: 14px;
-  }
-  .empty-icon { margin-bottom: 12px; opacity: .3; display: flex; justify-content: center; }
+/* ── FOLDER TABS ── */
+.folder-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.tab-btn{
+  background:var(--paper);border:2px solid var(--dim);
+  color:var(--dim2);
+  font-family:var(--px);font-size:6px;
+  padding:7px 12px;cursor:pointer;
+  letter-spacing:.06em;transition:all .06s;
+}
+.tab-btn:hover{border-color:var(--ink2);color:var(--ink2)}
+.tab-btn.active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 
-  /* ── OUTPUT ── */
-  .output-section { margin-top: 28px; }
-  .preview-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    margin-bottom: 14px;
-    min-height: 56px;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  }
-  .preview-box .ph { font-size: 13px; color: var(--muted); }
+/* ── IMAGE GRID ── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(152px,1fr));
+  gap:10px;margin-bottom:32px;
+}
+.img-card{
+  background:var(--paper);border:2px solid var(--dim);
+  overflow:hidden;cursor:crosshair;position:relative;
+  transition:border-color .06s;
+}
+.img-card:hover{border-color:var(--dim2)}
+.img-card.selected{
+  border:3px solid var(--ink);
+  box-shadow:4px 4px 0 var(--ink);
+}
+.img-card.selected::after{
+  content:'▶';position:absolute;top:5px;right:6px;
+  font-family:var(--px);font-size:7px;color:var(--ink);line-height:1;
+}
+.img-preview{
+  height:108px;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);padding:10px;
+}
+.img-preview img{max-width:100%;max-height:100%;object-fit:contain}
+.img-name{
+  padding:7px 9px;
+  font-size:11px;font-family:var(--mono);font-weight:500;
+  color:var(--dim2);word-break:break-all;
+  border-top:2px solid var(--dim);line-height:1.5;
+}
+.empty{grid-column:1/-1;text-align:center;padding:52px 20px;color:var(--dim2)}
+.empty pre{
+  font-size:12px;font-family:var(--mono);
+  line-height:1.9;display:inline-block;text-align:left;
+}
 
-  .code-block-wrap { margin-bottom: 10px; }
-  .code-label {
-    font-size: 12px; font-weight: 600; color: var(--muted);
-    margin-bottom: 4px; padding-left: 2px;
-  }
-  .code-block {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 14px;
-    font-family: 'SFMono-Regular', Consolas, monospace;
-    font-size: 13px;
-    white-space: pre-wrap; word-break: break-all;
-    color: #a5d6ff;
-  }
+/* ── OUTPUT SECTION ── */
+.output-section{margin-top:4px}
+.preview-box{
+  background:var(--bg);border:2px solid var(--dim);
+  padding:18px 20px;margin-bottom:14px;min-height:64px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.preview-box .ph{font-size:13px;font-family:var(--mono);color:var(--dim2)}
 
-  .copy-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-  .copy-btn {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-size: 13px;
-    padding: 7px 16px;
-    cursor: pointer;
-    transition: background .15s;
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .copy-btn:hover { background: var(--border); }
-  .copy-btn.copied { background: var(--accent); border-color: var(--accent); color: #fff; }
+.code-block-wrap{margin-bottom:14px}
+.code-label{
+  font-family:var(--px);font-size:6px;color:var(--ink);
+  letter-spacing:.16em;text-transform:uppercase;
+  margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.code-label::before{content:'> ';color:var(--dim2)}
+.code-block{
+  background:var(--bg);
+  border:2px solid var(--dim);border-left:4px solid var(--ink);
+  padding:14px 16px;
+  font-family:var(--mono);font-size:13px;font-weight:500;
+  white-space:pre-wrap;word-break:break-all;
+  color:#88ff88;line-height:1.8;
+}
+.copy-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="hdr-logo">
-    <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/>
-    </svg>
-    <span class="hdr-title">Image<span>Storage CDN</span></span>
-  </div>
+  <div class="hdr-title">IMG<span class="sl">//</span>STORAGE<span class="blink">_</span></div>
   <div class="hdr-spacer"></div>
   <a class="hdr-profile-link" id="profileLink" href="https://github.com/OstinUA" target="_blank" rel="noopener">
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
     <span id="profileLinkText">@OstinUA</span>
   </a>
 </header>
 
 <div class="shell">
 
-  <div class="sect-title">Settings</div>
-  <div class="settings-card">
+  <div class="sect-title">CONFIG</div>
+  <div class="box">
     <div class="settings-grid">
       <div class="field">
-        <label>GitHub Username</label>
+        <label>Username</label>
         <input type="text" id="ghUser" value="OstinUA" oninput="onSettingChange()">
       </div>
       <div class="field">
@@ -258,12 +287,12 @@
         <input type="text" id="ghBranch" value="main">
       </div>
       <div class="field">
-        <label>Width (px)</label>
+        <label>Width px</label>
         <input type="number" id="imgWidth" value="32" min="1" max="9999" oninput="regenCode()">
       </div>
       <div class="field">
-        <label>Height (px) — optional</label>
-        <input type="number" id="imgHeight" value="" min="1" max="9999" placeholder="auto" oninput="regenCode()">
+        <label>Height px (opt)</label>
+        <input type="number" id="imgHeight" placeholder="auto" min="1" max="9999" oninput="regenCode()">
       </div>
       <div class="field">
         <label>valign</label>
@@ -278,256 +307,227 @@
     <div class="settings-footer">
       <label class="checkbox-row">
         <input type="checkbox" id="linkProfile" checked onchange="regenCode()">
-        <span>Wrap in &lt;a href&gt; to GitHub profile</span>
+        <span>wrap &lt;a&gt; → github profile</span>
       </label>
       <label class="checkbox-row">
         <input type="checkbox" id="openBlank" checked onchange="regenCode()">
-        <span>Open link in new tab</span>
+        <span>target="_blank"</span>
       </label>
-      <button class="load-btn" id="loadBtn" onclick="loadRepo()">
-        <svg id="loadIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Load Repository
+      <button class="btn" id="loadBtn" style="margin-left:auto" onclick="loadRepo()">
+        <svg id="loadIcon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        LOAD REPO
       </button>
     </div>
   </div>
 
-  <div class="status-bar">
+  <div class="status-bar" id="statusBar">
     <div class="dot" id="dot"></div>
-    <span id="statusText">Press "Load Repository" to fetch images from GitHub.</span>
+    <span id="statusText">READY — press [LOAD REPO] to fetch images.</span>
   </div>
 
   <div class="folder-tabs" id="folderTabs"></div>
 
   <div class="grid" id="imgGrid">
-    <div class="empty">
-      <div class="empty-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      </div>
-      <div>No images loaded yet</div>
-    </div>
+    <div class="empty"><pre>
+ ┌──────────────────────┐
+ │   NO DATA LOADED     │
+ │                      │
+ │   configure above,   │
+ │   then [LOAD REPO]   │
+ └──────────────────────┘</pre></div>
   </div>
 
-  <div class="output-section" id="outputSection" style="display:none">
-    <div class="sect-title">Generated Code</div>
-
+  <div id="outputSection" style="display:none">
+    <div class="sect-title">OUTPUT</div>
     <div class="preview-box" id="previewBox">
-      <span class="ph">Preview will appear here after selecting an image</span>
+      <span class="ph">// select an image above to generate code</span>
     </div>
-
     <div class="code-block-wrap">
       <div class="code-label">HTML</div>
       <div class="code-block" id="htmlCode"></div>
     </div>
     <div class="code-block-wrap">
-      <div class="code-label">Markdown</div>
+      <div class="code-label">MARKDOWN</div>
       <div class="code-block" id="mdCode"></div>
     </div>
     <div class="code-block-wrap">
-      <div class="code-label">Raw URL</div>
+      <div class="code-label">RAW URL</div>
       <div class="code-block" id="rawUrl"></div>
     </div>
-
     <div class="copy-row">
-      <button class="copy-btn" id="btnCopyHtml" onclick="copyCode('html')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        Copy HTML
-      </button>
-      <button class="copy-btn" id="btnCopyMd" onclick="copyCode('md')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2v1"/></svg>
-        Copy Markdown
-      </button>
-      <button class="copy-btn" id="btnCopyUrl" onclick="copyCode('url')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-        Copy URL
-      </button>
+      <button class="btn-sm" id="btnCopyHtml" onclick="copyCode('html')">[COPY HTML]</button>
+      <button class="btn-sm" id="btnCopyMd"   onclick="copyCode('md')">[COPY MD]</button>
+      <button class="btn-sm" id="btnCopyUrl"  onclick="copyCode('url')">[COPY URL]</button>
     </div>
   </div>
 
 </div>
 
 <script>
-let allFiles = [];
-let currentFolder = 'all';
-let selectedFile = null;
+let allFiles = [], currentFolder = 'all', selectedFile = null;
 
-/* ── Profile link ── */
 function updateProfile() {
   const u = document.getElementById('ghUser').value.trim() || 'OstinUA';
   document.getElementById('profileLink').href = 'https://github.com/' + u;
   document.getElementById('profileLinkText').textContent = '@' + u;
 }
+function onSettingChange() { updateProfile(); regenCode(); }
 
-function onSettingChange() {
-  updateProfile();
-  regenCode();
-}
-
-/* ── Status ── */
 function setStatus(state, msg) {
+  document.getElementById('statusBar').className = 'status-bar ' + (state || '');
   document.getElementById('dot').className = 'dot ' + (state || '');
   document.getElementById('statusText').textContent = msg;
 }
 
-/* ── Load repo ── */
 async function loadRepo() {
-  const user = document.getElementById('ghUser').value.trim();
-  const repo = document.getElementById('ghRepo').value.trim();
+  const user   = document.getElementById('ghUser').value.trim();
+  const repo   = document.getElementById('ghRepo').value.trim();
   const branch = document.getElementById('ghBranch').value.trim() || 'main';
-  if (!user || !repo) { setStatus('err', 'Please fill in Username and Repository.'); return; }
+  if (!user || !repo) { setStatus('err', 'ERR: fill in username and repository.'); return; }
 
   const btn = document.getElementById('loadBtn');
   const icon = document.getElementById('loadIcon');
   btn.disabled = true;
-  btn.classList.add('loading');
   icon.innerHTML = '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>';
   setStatus('loading', `Fetching ${user}/${repo}@${branch}...`);
 
-  allFiles = [];
-  selectedFile = null;
+  allFiles = []; selectedFile = null;
   document.getElementById('folderTabs').innerHTML = '';
   document.getElementById('outputSection').style.display = 'none';
   renderGrid([]);
 
   try {
-    const url = `https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`;
-    const res = await fetch(url);
-    if (!res.ok) {
-      const e = await res.json().catch(()=>({}));
-      throw new Error(e.message || `HTTP ${res.status}`);
-    }
+    const res  = await fetch(`https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || `HTTP ${res.status}`); }
     const data = await res.json();
     const imgs = (data.tree || []).filter(f =>
       f.type === 'blob' && /\.(png|jpe?g|gif|svg|webp|ico|avif|bmp)$/i.test(f.path)
     );
     if (!imgs.length) {
-      setStatus('err', 'No images found. Add .png / .jpg / .gif / .svg / .webp files to the repo.');
+      setStatus('err', 'No images found — add .png/.jpg/.gif/.svg files to the repo.');
       renderGrid([]);
     } else {
       allFiles = imgs.map(f => ({
-        path: f.path,
-        folder: f.path.includes('/') ? f.path.split('/').slice(0,-1).join('/') : '(root)',
-        name: f.path.split('/').pop(),
-        raw: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${encodeURIComponent(f.path).replace(/%2F/g,'/')}`
+        path:   f.path,
+        folder: f.path.includes('/') ? f.path.split('/').slice(0, -1).join('/') : '(root)',
+        name:   f.path.split('/').pop(),
+        raw:    `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${encodeURIComponent(f.path).replace(/%2F/g, '/')}`
       }));
-      setStatus('ok', `Loaded ${allFiles.length} image(s) - ${user}/${repo}@${branch}`);
+      setStatus('ok', `OK: ${allFiles.length} image(s) loaded — ${user}/${repo}@${branch}`);
       currentFolder = 'all';
       buildFolderTabs();
       renderGrid(allFiles);
     }
-  } catch(e) {
-    setStatus('err', `Error: ${e.message}`);
+  } catch (e) {
+    setStatus('err', `ERR: ${e.message}`);
     renderGrid([]);
   }
 
   btn.disabled = false;
-  btn.classList.remove('loading');
   icon.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>';
 }
 
-/* ── Folders ── */
 function buildFolderTabs() {
-  const folders = ['all', ...[...new Set(allFiles.map(f=>f.folder))].sort()];
+  const folders = ['all', ...[...new Set(allFiles.map(f => f.folder))].sort()];
   document.getElementById('folderTabs').innerHTML = folders.map(f =>
-    `<button class="tab-btn${f===currentFolder?' active':''}" onclick="switchFolder('${CSS.escape(f)}')">${f==='all'?'All ('+allFiles.length+')':f}</button>`
+    `<button class="tab-btn${f === currentFolder ? ' active' : ''}" onclick="switchFolder(${JSON.stringify(f)})">${f === 'all' ? '[ALL: ' + allFiles.length + ']' : '[' + f + ']'}</button>`
   ).join('');
 }
-
 function switchFolder(f) {
   currentFolder = f;
   buildFolderTabs();
-  renderGrid(f==='all' ? allFiles : allFiles.filter(x=>x.folder===f));
+  renderGrid(f === 'all' ? allFiles : allFiles.filter(x => x.folder === f));
 }
 
-/* ── Grid ── */
 function renderGrid(files) {
   const g = document.getElementById('imgGrid');
   if (!files.length) {
-    g.innerHTML = `<div class="empty"><div class="empty-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div>No images here</div></div>`;
+    g.innerHTML = `<div class="empty"><pre>
+ ┌──────────────────────┐
+ │   NO DATA LOADED     │
+ │                      │
+ │   configure above,   │
+ │   then [LOAD REPO]   │
+ └──────────────────────┘</pre></div>`;
     return;
   }
   g.innerHTML = files.map(f => {
-    const sel = selectedFile && selectedFile.path===f.path ? ' selected' : '';
+    const sel = selectedFile && selectedFile.path === f.path ? ' selected' : '';
     return `<div class="img-card${sel}" onclick="selectImage(${JSON.stringify(f.path)})">
-      <div class="img-preview">
-        <img src="${f.raw}" loading="lazy" alt="${f.name}"
-          onerror="this.outerHTML='<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'24\\' height=\\'24\\' viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'#8b949e\\' stroke-width=\\'2\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><polyline points=\\'21 15 16 10 5 21\\'/></svg>'">
-      </div>
+      <div class="img-preview"><img src="${f.raw}" loading="lazy" alt="${toAlt(f.name)}"
+        onerror="this.outerHTML='<span style=\\'color:#555;font-size:20px\\'>?</span>'"></div>
       <div class="img-name">${f.name}</div>
     </div>`;
   }).join('');
 }
 
-/* ── Select + generate ── */
 function selectImage(path) {
-  selectedFile = allFiles.find(f=>f.path===path) || null;
-  const filtered = currentFolder==='all' ? allFiles : allFiles.filter(x=>x.folder===currentFolder);
-  renderGrid(filtered);
-  if (selectedFile) {
-    generateCode(selectedFile);
-    document.getElementById('outputSection').style.display = 'block';
-    setTimeout(()=>document.getElementById('outputSection').scrollIntoView({behavior:'smooth',block:'nearest'}),50);
-  }
+  selectedFile = allFiles.find(f => f.path === path) || null;
+  if (!selectedFile) return;
+
+  // Update card highlight without full re-render
+  document.querySelectorAll('.img-card').forEach(el => {
+    const isThis = el.querySelector('.img-name') && el.querySelector('.img-name').textContent === selectedFile.name
+      && el.onclick && el.getAttribute('onclick') && el.getAttribute('onclick').includes(JSON.stringify(path).slice(1,-1).replace(/\\/g,'\\\\'));
+    el.classList.toggle('selected', el.onclick && el.getAttribute('onclick') === `selectImage(${JSON.stringify(path)})`);
+  });
+  // Re-render to properly update selected state
+  renderGrid(currentFolder === 'all' ? allFiles : allFiles.filter(x => x.folder === currentFolder));
+
+  // Show output and generate code
+  const out = document.getElementById('outputSection');
+  out.style.display = 'block';
+  generateCode(selectedFile);
+  setTimeout(() => out.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
 }
 
-function regenCode() {
-  updateProfile();
-  if (selectedFile) generateCode(selectedFile);
-}
+function regenCode() { updateProfile(); if (selectedFile) generateCode(selectedFile); }
 
 function generateCode(file) {
-  const user   = document.getElementById('ghUser').value.trim() || 'OstinUA';
-  const w      = document.getElementById('imgWidth').value;
-  const h      = document.getElementById('imgHeight').value;
-  const va     = document.getElementById('imgValign').value;
-  const wrap   = document.getElementById('linkProfile').checked;
-  const blank  = document.getElementById('openBlank').checked;
+  const user  = document.getElementById('ghUser').value.trim() || 'OstinUA';
+  const w     = document.getElementById('imgWidth').value;
+  const h     = document.getElementById('imgHeight').value;
+  const va    = document.getElementById('imgValign').value;
+  const wrap  = document.getElementById('linkProfile').checked;
+  const blank = document.getElementById('openBlank').checked;
+  const alt   = toAlt(file.name);
 
-  const alt = toAlt(file.name);
-  let imgAttrs = `src="${file.raw}"`;
-  if (w) imgAttrs += ` width="${w}"`;
-  if (h) imgAttrs += ` height="${h}"`;
-  imgAttrs += ` valign="${va}" alt="${alt}"`;
+  let attrs = `src="${file.raw}"`;
+  if (w) attrs += ` width="${w}"`;
+  if (h) attrs += ` height="${h}"`;
+  attrs += ` valign="${va}" alt="${alt}"`;
 
-  const imgTag = `<img ${imgAttrs}>`;
+  const img    = `<img ${attrs}>`;
   const target = blank ? ' target="_blank" rel="noopener"' : '';
-  const html   = wrap
-    ? `<a href="https://github.com/${user}"${target}>${imgTag}</a>`
-    : imgTag;
+  const html   = wrap ? `<a href="https://github.com/${user}"${target}>${img}</a>` : img;
+  const md     = wrap ? `[![${alt}](${file.raw})](https://github.com/${user})` : `![${alt}](${file.raw})`;
 
-  const md = wrap
-    ? `[![${alt}](${file.raw})](https://github.com/${user})`
-    : `![${alt}](${file.raw})`;
+  document.getElementById('htmlCode').textContent = html;
+  document.getElementById('mdCode').textContent   = md;
+  document.getElementById('rawUrl').textContent   = file.raw;
 
-  document.getElementById('htmlCode').textContent  = html;
-  document.getElementById('mdCode').textContent    = md;
-  document.getElementById('rawUrl').textContent    = file.raw;
-
-  // Live preview
-  const box = document.getElementById('previewBox');
+  const box   = document.getElementById('previewBox');
   const clone = html.replace(/valign="[^"]*"/, '').replace(/<a /, '<a style="display:inline-flex;align-items:center" ');
-  box.innerHTML = clone + `<span style="font-size:12px;color:var(--muted);font-family:monospace">${file.name}</span>`;
+  box.innerHTML = clone + `<span style="font-size:12px;color:var(--dim2);font-family:var(--mono);margin-left:10px">${file.name}</span>`;
 }
 
-/* ── Copy ── */
 function copyCode(type) {
-  const map = {html:'htmlCode',md:'mdCode',url:'rawUrl'};
-  const btnMap = {html:'btnCopyHtml',md:'btnCopyMd',url:'btnCopyUrl'};
-  const text = document.getElementById(map[type]).textContent;
-  const btn  = document.getElementById(btnMap[type]);
-  navigator.clipboard.writeText(text).then(()=>{
+  const ids = { html: 'htmlCode', md: 'mdCode', url: 'rawUrl' };
+  const btns = { html: 'btnCopyHtml', md: 'btnCopyMd', url: 'btnCopyUrl' };
+  const text = document.getElementById(ids[type]).textContent;
+  const btn  = document.getElementById(btns[type]);
+  navigator.clipboard.writeText(text).then(() => {
     btn.classList.add('copied');
-    const old = btn.innerHTML;
-    btn.innerHTML = 'Copied!';
-    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML=old;},2000);
+    const old = btn.textContent;
+    btn.textContent = '[✓ COPIED]';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = old; }, 2000);
   });
 }
 
-/* ── Alt text helper ── */
 function toAlt(filename) {
   return filename.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ');
 }
 
-// Init
 updateProfile();
 </script>
 </body>
