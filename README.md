@@ -42,6 +42,29 @@
 ### Project Structure
 
 <!-- STRUCTURE_START -->
+```text
+.
+├── Factorio/
+│   └── Gear-silhouette-of-the-Factorio-logo.png
+├── adwmg/
+│   └── pidpus-2.png
+├── index.html
+├── LICENSE
+└── README.md
+```
+
+#### 📁 `Factorio`
+
+| Preview | File | Raw URL |
+|---------|------|---------|
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/Factorio/Gear-silhouette-of-the-Factorio-logo.png" height="32"> | `Gear-silhouette-of-the-Factorio-logo.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/Factorio/Gear-silhouette-of-the-Factorio-logo.png) |
+
+#### 📁 `adwmg`
+
+| Preview | File | Raw URL |
+|---------|------|---------|
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/adwmg/pidpus-2.png" height="32"> | `pidpus-2.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/adwmg/pidpus-2.png) |
+
 <!-- STRUCTURE_END -->
 
 ### Key Design Decisions
