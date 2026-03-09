@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Storage CDN</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --accent: #238636;
+    --accent-hover: #2ea043;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --link: #58a6ff;
+    --code-bg: #1c2128;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  header svg { flex-shrink: 0; }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header a { color: var(--link); text-decoration: none; font-size: 13px; margin-left: auto; }
+  header a:hover { text-decoration: underline; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 28px 20px; }
+
+  .settings-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .settings-card h2 { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 16px; }
+
+  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media(max-width:560px){ .settings-grid { grid-template-columns: 1fr; } }
+
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  input[type=text], input[type=number], select {
+    width: 100%;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  input[type=text]:focus, input[type=number]:focus, select:focus { border-color: var(--link); }
+  select option { background: var(--code-bg); }
+
+  .checkbox-row { display: flex; align-items: center; gap: 8px; }
+  .checkbox-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+  .checkbox-row label { margin: 0; color: var(--text); cursor: pointer; font-size: 14px; }
+
+  .status-bar {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .dot.ok { background: #3fb950; }
+  .dot.err { background: #f85149; }
+  .dot.loading { background: #d29922; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  .folder-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-size: 13px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .tab-btn:hover { border-color: var(--link); color: var(--link); }
+  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+  }
+  .img-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color .15s, transform .12s;
+    position: relative;
+  }
+  .img-card:hover { border-color: var(--link); transform: translateY(-2px); }
+  .img-card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .img-preview {
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0d1117;
+    padding: 8px;
+  }
+  .img-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .img-name { padding: 8px; font-size: 11px; color: var(--muted); word-break: break-all; border-top: 1px solid var(--border); }
+
+  .empty { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 14px; }
+  .empty svg { opacity: .3; margin-bottom: 12px; }
+
+  .output-section { margin-top: 28px; }
+  .output-section h2 { font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+
+  .preview-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .preview-box span { font-size: 13px; color: var(--muted); }
+
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: #a5d6ff;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .copy-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 13px;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: background .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .copy-btn:hover { background: var(--border); }
+  .copy-btn.copied { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .load-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .load-btn:hover { background: var(--accent-hover); }
+  .load-btn:disabled { opacity: .5; cursor: not-allowed; }
+</style>
+</head>
+<body>
+
+<header>
+  <svg height="24" viewBox="0 0 16 16" fill="#c9d1d9"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+  <h1>Image Storage CDN</h1>
+  <a id="profileLink" href="https://github.com/OstinUA" target="_blank">@OstinUA</a>
+</header>
+
+<div class="container">
+
+  <!-- Settings -->
+  <div class="settings-card">
+    <h2>⚙ Settings</h2>
+    <div class="settings-grid">
+      <div>
+        <label>GitHub Username</label>
+        <input type="text" id="ghUser" value="OstinUA" oninput="updateProfile()">
+      </div>
+      <div>
+        <label>Repository Name</label>
+        <input type="text" id="ghRepo" value="Image-storage">
+      </div>
+      <div>
+        <label>Branch</label>
+        <input type="text" id="ghBranch" value="main">
+      </div>
+      <div>
+        <label>Image Width (px)</label>
+        <input type="number" id="imgWidth" value="32" min="1" max="9999">
+      </div>
+      <div>
+        <label>valign</label>
+        <select id="imgValign">
+          <option value="middle" selected>middle</option>
+          <option value="top">top</option>
+          <option value="bottom">bottom</option>
+          <option value="baseline">baseline</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end;padding-bottom:2px">
+        <div class="checkbox-row">
+          <input type="checkbox" id="linkProfile" checked>
+          <label for="linkProfile">Wrap in &lt;a&gt; to GitHub profile</label>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <button class="load-btn" id="loadBtn" onclick="loadRepo()">Load Repository</button>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="status-bar">
+    <div class="dot" id="dot"></div>
+    <span id="statusText">Press "Load Repository" to fetch images.</span>
+  </div>
+
+  <!-- Folder tabs -->
+  <div class="folder-tabs" id="folderTabs"></div>
+
+  <!-- Image grid -->
+  <div class="grid" id="imgGrid">
+    <div class="empty" style="grid-column:1/-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <p>No images loaded yet</p>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div class="output-section" id="outputSection" style="display:none">
+    <h2>🔗 Generated Code</h2>
+    <div class="preview-box" id="previewBox"><span>Preview will appear here</span></div>
+    <div class="code-block" id="htmlCode"></div>
+    <div class="code-block" id="mdCode"></div>
+    <div class="row-btns">
+      <button class="copy-btn" id="copyHtml" onclick="copyCode('html')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy HTML
+      </button>
+      <button class="copy-btn" id="copyMd" onclick="copyCode('md')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Markdown
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let allFiles = [];
+let currentFolder = 'all';
+let selectedFile = null;
+
+function updateProfile() {
+  const u = document.getElementById('ghUser').value.trim();
+  const a = document.getElementById('profileLink');
+  a.href = 'https://github.com/' + u;
+  a.textContent = '@' + u;
+  if (selectedFile) generateCode(selectedFile);
+}
+
+function setStatus(state, msg) {
+  const dot = document.getElementById('dot');
+  const st = document.getElementById('statusText');
+  dot.className = 'dot ' + (state || '');
+  st.textContent = msg;
+}
+
+async function loadRepo() {
+  const user = document.getElementById('ghUser').value.trim();
+  const repo = document.getElementById('ghRepo').value.trim();
+  const branch = document.getElementById('ghBranch').value.trim();
+  if (!user || !repo) { setStatus('err', 'Fill in username and repo name.'); return; }
+
+  const btn = document.getElementById('loadBtn');
+  btn.disabled = true;
+  setStatus('loading', 'Fetching repository tree…');
+  allFiles = [];
+  selectedFile = null;
+  document.getElementById('outputSection').style.display = 'none';
+
+  try {
+    const url = `https://api.github.com/repos/${user}/${repo}/git/trees/${branch}?recursive=1`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`GitHub API: ${res.status} ${res.statusText}`);
+    const data = await res.json();
+    const imgs = (data.tree || []).filter(f =>
+      f.type === 'blob' && /\.(png|jpe?g|gif|svg|webp|ico|bmp)$/i.test(f.path)
+    );
+    if (!imgs.length) { setStatus('err', 'No images found in repository.'); renderGrid([]); btn.disabled = false; return; }
+    allFiles = imgs.map(f => ({
+      path: f.path,
+      folder: f.path.includes('/') ? f.path.split('/').slice(0,-1).join('/') : '(root)',
+      name: f.path.split('/').pop(),
+      raw: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${f.path}`
+    }));
+    setStatus('ok', `Loaded ${allFiles.length} image(s) from ${user}/${repo}`);
+    buildFolderTabs();
+    renderGrid(allFiles);
+  } catch(e) {
+    setStatus('err', e.message);
+    renderGrid([]);
+  }
+  btn.disabled = false;
+}
+
+function buildFolderTabs() {
+  const tabs = document.getElementById('folderTabs');
+  const folders = ['all', ...[...new Set(allFiles.map(f => f.folder))].sort()];
+  tabs.innerHTML = folders.map(f =>
+    `<button class="tab-btn${f===currentFolder?' active':''}" onclick="switchFolder('${f}')">${f==='all'?'🗂 All':f}</button>`
+  ).join('');
+}
+
+function switchFolder(f) {
+  currentFolder = f;
+  buildFolderTabs();
+  const filtered = f === 'all' ? allFiles : allFiles.filter(x => x.folder === f);
+  renderGrid(filtered);
+}
+
+function renderGrid(files) {
+  const grid = document.getElementById('imgGrid');
+  if (!files.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <p>No images here</p></div>`;
+    return;
+  }
+  grid.innerHTML = files.map(f => `
+    <div class="img-card${selectedFile&&selectedFile.path===f.path?' selected':''}" onclick="selectImage('${f.path}')">
+      <div class="img-preview"><img src="${f.raw}" loading="lazy" alt="${f.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22><text y=%2236%22 font-size=%2236%22>🖼</text></svg>'"></div>
+      <div class="img-name">${f.name}</div>
+    </div>`).join('');
+}
+
+function selectImage(path) {
+  selectedFile = allFiles.find(f => f.path === path) || null;
+  // re-render to update selected state
+  const filtered = currentFolder === 'all' ? allFiles : allFiles.filter(x => x.folder === currentFolder);
+  renderGrid(filtered);
+  if (selectedFile) generateCode(selectedFile);
+}
+
+function generateCode(file) {
+  const width = document.getElementById('imgWidth').value || '32';
+  const valign = document.getElementById('imgValign').value;
+  const withLink = document.getElementById('linkProfile').checked;
+  const user = document.getElementById('ghUser').value.trim();
+
+  const imgTag = `<img src="${file.raw}" width="${width}" valign="${valign}" alt="${file.name}">`;
+  const html = withLink
+    ? `<a href="https://github.com/${user}" target="_blank">${imgTag}</a>`
+    : imgTag;
+  const md = withLink
+    ? `[![${file.name}](${file.raw})](https://github.com/${user})`
+    : `![${file.name}](${file.raw})`;
+
+  document.getElementById('htmlCode').textContent = html;
+  document.getElementById('mdCode').textContent = md;
+
+  // Preview
+  const box = document.getElementById('previewBox');
+  box.innerHTML = html;
+
+  document.getElementById('outputSection').style.display = 'block';
+  document.getElementById('outputSection').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// Live update on settings change
+['imgWidth','imgValign','linkProfile'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => { if (selectedFile) generateCode(selectedFile); });
+});
+document.getElementById('imgWidth').addEventListener('input', () => { if (selectedFile) generateCode(selectedFile); });
+
+function copyCode(type) {
+  const el = document.getElementById(type === 'html' ? 'htmlCode' : 'mdCode');
+  const btn = document.getElementById(type === 'html' ? 'copyHtml' : 'copyMd');
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy ${type.toUpperCase()}`;
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
