@@ -49,6 +49,7 @@
 ├── adwmg/
 │   └── pidpus-2.png
 ├── readme/
+│   └── OstinUA_Looping_Donut-(1).gif
 │   └── OstinUA_github_readme_v1.gif
 │   └── OstinUA_github_readme_v1Donut.gif
 │   └── OstinUA_github_readme_v1Donut.svg
@@ -76,6 +77,7 @@
 
 | Preview | File | Raw URL |
 |---------|------|---------|
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_Looping_Donut-(1).gif" height="32"> | `OstinUA_Looping_Donut-(1).gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_Looping_Donut-(1).gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif" height="32"> | `OstinUA_github_readme_v1.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1Donut.gif" height="32"> | `OstinUA_github_readme_v1Donut.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1Donut.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1Donut.svg" height="32"> | `OstinUA_github_readme_v1Donut.svg` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1Donut.svg) |
