@@ -48,6 +48,8 @@
 │   └── Gear-silhouette-of-the-Factorio-logo.png
 ├── adwmg/
 │   └── pidpus-2.png
+├── readme/
+│   └── OstinUA_github_readme_v1.gif
 ├── index.html
 ├── LICENSE
 └── README.md
@@ -64,6 +66,12 @@
 | Preview | File | Raw URL |
 |---------|------|---------|
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/adwmg/pidpus-2.png" height="32"> | `pidpus-2.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/adwmg/pidpus-2.png) |
+
+#### 📁 `readme`
+
+| Preview | File | Raw URL |
+|---------|------|---------|
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif" height="32"> | `OstinUA_github_readme_v1.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif) |
 
 <!-- STRUCTURE_END -->
 
