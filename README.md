@@ -50,6 +50,9 @@
 │   └── pidpus-2.png
 ├── readme/
 │   └── OstinUA_github_readme_v1.gif
+│   └── OstinUA_github_readme_v2.gif
+│   └── OstinUA_github_readme_v3.gif
+│   └── OstinUA_github_readme_v4.gif
 ├── index.html
 ├── LICENSE
 └── README.md
@@ -72,6 +75,9 @@
 | Preview | File | Raw URL |
 |---------|------|---------|
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif" height="32"> | `OstinUA_github_readme_v1.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v2.gif" height="32"> | `OstinUA_github_readme_v2.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v2.gif) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v3.gif" height="32"> | `OstinUA_github_readme_v3.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v3.gif) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v4.gif" height="32"> | `OstinUA_github_readme_v4.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v4.gif) |
 
 <!-- STRUCTURE_END -->
 
