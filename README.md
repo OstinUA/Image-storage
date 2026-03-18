@@ -57,6 +57,7 @@
 │   └── OstinUA_github_readme_v3.gif
 │   └── OstinUA_github_readme_v4.gif
 │   └── OstinUA_github_readme_v7.gif
+│   └── readme-SVG-Banned-words_contributing.png
 │   └── readme-SVG-Banned-words_readme.png
 ├── index.html
 ├── LICENSE
@@ -87,6 +88,7 @@
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v3.gif" height="32"> | `OstinUA_github_readme_v3.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v3.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v4.gif" height="32"> | `OstinUA_github_readme_v4.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v4.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v7.gif" height="32"> | `OstinUA_github_readme_v7.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v7.gif) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/readme-SVG-Banned-words_contributing.png" height="32"> | `readme-SVG-Banned-words_contributing.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/readme-SVG-Banned-words_contributing.png) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/readme-SVG-Banned-words_readme.png" height="32"> | `readme-SVG-Banned-words_readme.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/readme-SVG-Banned-words_readme.png) |
 
 <!-- STRUCTURE_END -->
