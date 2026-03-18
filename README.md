@@ -51,6 +51,7 @@
 ├── readme/
 │   └── readme-SVG-Banned-words_contributing.png
 │   └── readme-SVG-Banned-words_readme.png
+│   └── readme-SVG-Banned-words_сodeofсonduct.png
 │   └── OstinUA_Looping_Donut-(1).gif
 │   └── OstinUA_github_readme_v1.gif
 │   └── OstinUA_github_readme_v1Donut.gif
@@ -95,6 +96,7 @@
 |---------|------|---------|
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Banned-words/readme-SVG-Banned-words_contributing.png" height="32"> | `readme-SVG-Banned-words_contributing.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Banned-words/readme-SVG-Banned-words_contributing.png) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Banned-words/readme-SVG-Banned-words_readme.png" height="32"> | `readme-SVG-Banned-words_readme.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Banned-words/readme-SVG-Banned-words_readme.png) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Banned-words/readme-SVG-Banned-words_сodeofсonduct.png" height="32"> | `readme-SVG-Banned-words_сodeofсonduct.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Banned-words/readme-SVG-Banned-words_сodeofсonduct.png) |
 
 <!-- STRUCTURE_END -->
 
