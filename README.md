@@ -62,6 +62,7 @@
 │   └── OstinUA_github_readme_v3.gif
 │   └── OstinUA_github_readme_v4.gif
 │   └── OstinUA_github_readme_v7.gif
+│   └── Sellers.json-Inspector.png
 │   └── readme-SVG-ads.txt-app-ads.txt-sellers.json-Lines-Checker.png
 ├── index.html
 ├── LICENSE
@@ -93,6 +94,7 @@
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v3.gif" height="32"> | `OstinUA_github_readme_v3.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v3.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v4.gif" height="32"> | `OstinUA_github_readme_v4.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v4.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v7.gif" height="32"> | `OstinUA_github_readme_v7.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v7.gif) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Sellers.json-Inspector.png" height="32"> | `Sellers.json-Inspector.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/Sellers.json-Inspector.png) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/readme-SVG-ads.txt-app-ads.txt-sellers.json-Lines-Checker.png" height="32"> | `readme-SVG-ads.txt-app-ads.txt-sellers.json-Lines-Checker.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/readme-SVG-ads.txt-app-ads.txt-sellers.json-Lines-Checker.png) |
 
 #### 📁 `readme/Banned-words`
