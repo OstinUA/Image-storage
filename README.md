@@ -54,6 +54,7 @@
 │   └── readme-SVG-Banned-words_security.png
 │   └── readme-SVG-Banned-words_сodeofсonduct.png
 │   └── FCTostin-team  Factorio Ostin-Team organization.png
+│   └── OstinUA_8bit.gif
 │   └── OstinUA_Donut_CSS_Animated.svg
 │   └── OstinUA_Looping_Donut-(1).gif
 │   └── OstinUA_github_readme_v1.gif
@@ -88,6 +89,7 @@
 | Preview | File | Raw URL |
 |---------|------|---------|
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/FCTostin-team  Factorio Ostin-Team organization.png" height="32"> | `FCTostin-team  Factorio Ostin-Team organization.png` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/FCTostin-team  Factorio Ostin-Team organization.png) |
+| <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_8bit.gif" height="32"> | `OstinUA_8bit.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_8bit.gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_Donut_CSS_Animated.svg" height="32"> | `OstinUA_Donut_CSS_Animated.svg` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_Donut_CSS_Animated.svg) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_Looping_Donut-(1).gif" height="32"> | `OstinUA_Looping_Donut-(1).gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_Looping_Donut-(1).gif) |
 | <img src="https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif" height="32"> | `OstinUA_github_readme_v1.gif` | [link](https://raw.githubusercontent.com/OstinUA/Image-storage/main/readme/OstinUA_github_readme_v1.gif) |
